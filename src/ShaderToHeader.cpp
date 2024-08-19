@@ -2,7 +2,7 @@
  * ShaderToHeader.cpp
  *
  *  Created on: Jul 14, 2024
- *      Author: irrl
+ *      Author: Metehan Gezer
  */
 
 #include <iostream>
