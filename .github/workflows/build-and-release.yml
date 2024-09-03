@@ -81,19 +81,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Download Linux binary
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4.1.7
       with:
         name: linux-binary
         path: linux
 
     - name: Download macOS binary
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4.1.7
       with:
         name: macos-binary
         path: macos
 
     - name: Download Windows binary
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4.1.7
       with:
         name: windows-binary
         path: windows
