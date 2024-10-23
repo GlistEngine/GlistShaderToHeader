@@ -12,7 +12,7 @@ add_executable(GlistShaderToHeader src/ShaderToHeader.cpp)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     message(STATUS "Configuring for Linux x86_64")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64 -static-libgcc -static-libstdc++")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     message(STATUS "Configuring for macOS")
     # Set architecture to both x86_64 and arm64 if you want a universal binary
@@ -20,4 +20,10 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     message(STATUS "Configuring for Windows x86_64")
     set(CMAKE_GENERATOR_PLATFORM x64)
+
+    # For MSVC, link the runtime statically
+    if(MSVC)
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
+    endif()
 endif()
