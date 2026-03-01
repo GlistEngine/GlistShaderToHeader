@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 #include <cstdint>
 #include <algorithm>
 
@@ -54,16 +55,17 @@ int main(int argc, char* argv[]) {
 	header_file << "#ifndef " << include_guard << "\n";
 	header_file << "#define " << include_guard << "\n\n";
     header_file << "#include <array>\n\n";
-    header_file << "constexpr std::array<const char, " << size + 1 << "> shader_" << file_name << " = { ";
 
-    std::string line;
-    while (std::getline(shader_file, line)) {
-        for (char c : line) {
-            header_file << "0x" << std::hex << std::uppercase << static_cast<uint32_t>(c) << ", ";
-        }
-        header_file << "0x" << std::hex << std::uppercase << static_cast<uint32_t>('\n') << ", ";
+    // Read all bytes at once (works for both text GLSL and binary SPIR-V)
+    std::vector<char> data(size);
+    shader_file.read(data.data(), size);
+
+    header_file << "constexpr std::array<const unsigned char, " << size << "> shader_" << file_name << " = { ";
+    for (size_t i = 0; i < size; i++) {
+        header_file << "0x" << std::hex << std::uppercase
+                    << static_cast<uint32_t>(static_cast<unsigned char>(data[i]));
+        if (i + 1 < size) header_file << ", ";
     }
-
     header_file << " };\n\n";
 	header_file << "#endif // " << include_guard;
 
